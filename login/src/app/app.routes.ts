@@ -12,20 +12,19 @@ export const routes: Routes = [
     path: 'dashboard',
     loadComponent: () => import('./pages/dashboard/dashboard.component')
       .then(m => m.DashboardComponent),
-    canActivate: [authGuard],           // connecté ?
+    canActivate: [authGuard],
   },
   {
     path: 'admin',
     loadComponent: () => import('./pages/admin/admin.component')
       .then(m => m.AdminComponent),
-    canActivate: [authGuard, roleGuard], // connecté ? + bon rôle ?
-    data: { role: 'admin' }             // ← rôle requis ici
+    canActivate: [authGuard, roleGuard],
+    data: { role: 'admin' }
   },
   {
     path: 'forbidden',
     loadComponent: () => import('./pages/forbidden/forbidden.component')
       .then(m => m.ForbiddenComponent),
-    // pas de guard ici — accessible à tous
   },
   {
     path: '',

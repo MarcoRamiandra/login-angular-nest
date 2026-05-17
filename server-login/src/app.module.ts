@@ -9,10 +9,8 @@ import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
-    // charge le .env globalement dans toute l'app
-    ConfigModule.forRoot({ isGlobal: true, }),
+    ConfigModule.forRoot({ isGlobal: true }),
 
-    // connecte PostgreSQL via TypeORM
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -26,8 +24,6 @@ import { AdminModule } from './admin/admin.module';
 
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
 
-        // true = TypeORM crée/modifie les tables automatiquement
-        // à mettre false en production
         synchronize: true,
       }),
     }),

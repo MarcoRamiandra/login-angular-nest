@@ -13,7 +13,6 @@ export const authGuard: CanActivateFn = (
     return true;
   }
 
-  // on sauvegarde l'url demandée pour y revenir après login
   return router.createUrlTree(['/login'], {
     queryParams: { returnUrl: state.url }
   });

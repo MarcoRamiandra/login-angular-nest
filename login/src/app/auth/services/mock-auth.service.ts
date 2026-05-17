@@ -36,7 +36,6 @@ export class MockAuthService {
   }
 
   refreshToken(currentRefreshToken: string): Observable<AuthTokens> {
-    // On simule : le refresh token encode l'userId après le préfixe "refresh_"
     const userId = currentRefreshToken.replace('refresh_', '');
     const userExists = Object.values(MOCK_USERS).some(m => m.user.id === userId);
 
@@ -52,7 +51,6 @@ export class MockAuthService {
   }
 
   getProfile(accessToken: string): Observable<User> {
-    // Le token encode l'userId après le préfixe "token_"
     const userId = accessToken.replace('token_', '');
     const match = Object.values(MOCK_USERS).find(m => m.user.id === userId);
 
@@ -71,7 +69,7 @@ export class MockAuthService {
     return {
       accessToken: `token_${userId}`,
       refreshToken: `refresh_${userId}`,
-      expiresAt: Date.now() + 15 * 60 * 1000, // 15 minutes
+      expiresAt: Date.now() + 15 * 60 * 1000,
     };
   }
 }

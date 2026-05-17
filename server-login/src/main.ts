@@ -13,10 +13,9 @@ async function bootstrap() {
 
   app.setGlobalPrefix('api');
 
-  // valide automatiquement tous les DTOs entrants
   app.useGlobalPipes(new ValidationPipe({
-    whitelist: true,    // supprime les champs non déclarés dans le DTO
-    transform: true,    // convertit automatiquement les types
+    whitelist: true,
+    transform: true,
   }));
 
   app.useGlobalFilters(new HttpExceptionFilter());

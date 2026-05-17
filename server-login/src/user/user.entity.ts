@@ -16,7 +16,7 @@ export class User {
     email!: string;
 
     @Column()
-    password!: string; // sera hashé — jamais le mot de passe en clair
+    password!: string;
 
     @Column({ default: 'user' })
     role!: 'admin' | 'user';

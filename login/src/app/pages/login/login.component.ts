@@ -18,13 +18,11 @@ export class LoginComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private authStore = inject(AuthStore);
 
-  // signaux exposés au template
   isLoading = this.authStore.isLoading;
   hasError = this.authStore.hasError;
   error = this.authStore.error;
   isSessionExpired = this.authStore.isSessionExpired;
 
-  // returnUrl récupéré depuis les queryParams
   private returnUrl = '/dashboard';
 
   form: FormGroup = this.fb.group({
@@ -35,21 +33,17 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] ?? '/dashboard';
 
-    // si déjà connecté → redirection immédiate
     if (this.authStore.isAuthenticated()) {
       this.router.navigateByUrl(this.returnUrl);
     }
 
-    // on remet sessionExpired à false dès que l'utilisateur
-    // commence à interagir avec le formulaire
     this.form.valueChanges.pipe(take(1)).subscribe(() => {
       if (this.authStore.isSessionExpired()) {
-        this.authStore.logout(); // reset sessionExpired → false
+        this.authStore.logout();
       }
     });
   }
 
-  // messages d'erreur des champs
   getFieldError(field: string): string | null {
     const control = this.form.get(field);
     if (!control || !control.invalid || !control.touched) return null;
@@ -61,7 +55,6 @@ export class LoginComponent implements OnInit {
     return null;
   }
 
-  // message d'erreur du store — mappé depuis le code
   get storeErrorMessage(): string | null {
     const code = this.error()?.code;
     if (!code) return null;
@@ -85,7 +78,6 @@ export class LoginComponent implements OnInit {
 
     const { email, password } = this.form.value;
 
-    // on écoute le changement de status pour savoir quand c'est fini
     const checkSuccess = setInterval(() => {
       if (this.authStore.status() === 'success') {
         clearInterval(checkSuccess);
@@ -93,7 +85,6 @@ export class LoginComponent implements OnInit {
       }
       if (this.authStore.status() === 'error') {
         clearInterval(checkSuccess);
-        // le store a déjà mis à jour error() — le template réagit seul
       }
     }, 50);
 

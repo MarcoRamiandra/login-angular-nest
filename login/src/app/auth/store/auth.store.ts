@@ -15,7 +15,7 @@ interface AuthState {
   tokens: AuthTokens | null;
   status: AuthStatus;
   error: AuthError | null;
-  sessionExpired: boolean;   // ← ajouter
+  sessionExpired: boolean;
 }
 
 const initialState: AuthState = {
@@ -23,7 +23,7 @@ const initialState: AuthState = {
   tokens: null,
   status: 'idle',
   error: null,
-  sessionExpired: false,     // ← ajouter
+  sessionExpired: false,
 };
 
 // --- Store ---
@@ -49,15 +49,13 @@ export const AuthStore = signalStore(
 
     login: rxMethod<LoginCredentials>(
       pipe(
-        // 1. on passe en loading dès le départ
         tap(() => patchState(store, { status: 'loading', error: null })),
 
-        // 2. on appelle le service
         switchMap(credentials =>
           authService.login(credentials).pipe(
             tapResponse({
               next: ({ tokens, user }) => {
-                tokenService.save(tokens); // ← ajouter cette ligne
+                tokenService.save(tokens);
                 patchState(store, {
                   user,
                   tokens,
@@ -82,19 +80,17 @@ export const AuthStore = signalStore(
 
     logout(): void {
       tokenService.clear();
-      patchState(store, initialState); // initialState a sessionExpired: false
+      patchState(store, initialState);
     },
 
     restoreSession(): void {
       const tokens = tokenService.get();
 
-      // cas 1 — rien dans le storage
       if (!tokens) {
         patchState(store, { status: 'idle' });
         return;
       }
 
-      // cas 2 — token valide → on récupère le profil
       if (tokenService.isValid()) {
         patchState(store, { status: 'loading' });
 
@@ -116,7 +112,6 @@ export const AuthStore = signalStore(
         return;
       }
 
-      // cas 3 — token expiré → on tente un refresh
       patchState(store, { status: 'loading' });
 
       authService.refreshToken(tokens.refreshToken).subscribe({
@@ -149,7 +144,7 @@ export const AuthStore = signalStore(
       tokenService.clear();
       patchState(store, {
         ...initialState,
-        sessionExpired: true,   // ← seule différence avec logout()
+        sessionExpired: true,
       });
     },
   }))

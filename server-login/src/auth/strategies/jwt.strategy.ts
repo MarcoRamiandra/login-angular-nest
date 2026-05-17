@@ -18,15 +18,12 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
         private readonly userService: UserService,
     ) {
         super({
-            // extrait le token depuis le header Authorization: Bearer <token>
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
             secretOrKey: configService.getOrThrow<string>('JWT_ACCESS_SECRET'),
             ignoreExpiration: false,
         });
     }
 
-    // appelée automatiquement si le token est valide
-    // ce qu'on retourne ici est injecté dans req.user
     async validate(payload: JwtPayload) {
         const user = await this.userService.findById(payload.sub);
         if (!user) {

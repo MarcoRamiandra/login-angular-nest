@@ -25,8 +25,8 @@ import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
   controllers: [AuthController],
   providers: [
     AuthService,
-    JwtStrategy,         // ← ajouter
-    JwtRefreshStrategy,  // ← ajouter
+    JwtStrategy,
+    JwtRefreshStrategy,
   ],
   exports: [AuthService],
 })
