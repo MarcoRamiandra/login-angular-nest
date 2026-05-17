@@ -1,0 +1,106 @@
+<div class="min-h-screen flex items-center justify-center bg-slate-100 px-4">
+  <div class="w-full max-w-md">
+    <!-- Card -->
+    <div class="bg-white border border-slate-200 shadow-sm p-8">
+      <!-- Header -->
+      <div class="mb-8">
+        <h1 class="text-2xl font-semibold text-slate-800">Connexion</h1>
+
+        <p class="mt-1 text-sm text-slate-500">Connectez-vous à votre compte</p>
+      </div>
+
+      <!-- Session Expired -->
+      @if (isSessionExpired()) {
+        <div class="mb-4 border border-yellow-200 bg-yellow-50 px-4 py-3 text-sm text-yellow-700">
+          Votre session a expiré. Veuillez vous reconnecter.
+        </div>
+      }
+
+      <!-- Error -->
+      @if (hasError() && storeErrorMessage) {
+        <div class="mb-4 border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+          {{ storeErrorMessage }}
+        </div>
+      }
+
+      <!-- Form -->
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-5">
+        <!-- Email -->
+        <div>
+          <label for="email" class="mb-2 block text-sm font-medium text-slate-700">
+            Adresse email
+          </label>
+
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            placeholder="admin@app.com"
+            autocomplete="email"
+            class="w-full border border-slate-300 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-blue-600"
+            [class.border-red-500]="getFieldError('email')"
+          />
+
+          @if (getFieldError('email')) {
+            <p class="mt-2 text-sm text-red-500">
+              {{ getFieldError('email') }}
+            </p>
+          }
+        </div>
+
+        <!-- Password -->
+        <div>
+          <label for="password" class="mb-2 block text-sm font-medium text-slate-700">
+            Mot de passe
+          </label>
+
+          <input
+            id="password"
+            type="password"
+            formControlName="password"
+            placeholder="••••••••"
+            autocomplete="current-password"
+            class="w-full border border-slate-300 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-blue-600"
+            [class.border-red-500]="getFieldError('password')"
+          />
+
+          @if (getFieldError('password')) {
+            <p class="mt-2 text-sm text-red-500">
+              {{ getFieldError('password') }}
+            </p>
+          }
+        </div>
+
+        <!-- Options -->
+        <div class="flex items-center justify-between text-sm">
+          <label class="flex items-center gap-2 text-slate-600">
+            <input type="checkbox" class="border-slate-300 text-blue-600 focus:ring-blue-500" />
+            Se souvenir de moi
+          </label>
+
+          <a href="#" class="text-blue-600 hover:text-blue-700"> Mot de passe oublié ? </a>
+        </div>
+
+        <!-- Submit -->
+
+        @if (isLoading()) {
+          <button
+            type="submit"
+            [disabled]="isLoading()"
+            class="w-full bg-slate-900 px-4 py-3 text-sm font-medium text-white transition hover:bg-slate-800 disabled:opacity-70 focus:cursor-not-allowed"
+          >
+            <span>Connexion...</span>
+          </button>
+        } @else {
+          <button
+            type="submit"
+            [disabled]="isLoading()"
+            class="w-full bg-slate-900 px-4 py-3 text-sm font-medium text-white transition hover:bg-slate-800 disabled:opacity-70 focus:cursor-pointer"
+          >
+            <span>Se connecter</span>
+          </button>
+        }
+      </form>
+    </div>
+  </div>
+</div>

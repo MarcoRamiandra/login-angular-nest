@@ -1,0 +1,56 @@
+<div class="w-1/2 mx-auto mt-10 p-5 border rounded space-y-3">
+  <div class="flex items-center gap-2">
+    <span class="font-semibold text-gray-600 shrink-0">Rôle :</span>
+    <span
+      class="px-2 py-0.5 rounded text-sm font-bold"
+      [class.bg-purple-100]="authStore.userRole() === 'admin'"
+      [class.text-purple-700]="authStore.userRole() === 'admin'"
+      [class.bg-blue-100]="authStore.userRole() === 'user'"
+      [class.text-blue-700]="authStore.userRole() === 'user'"
+    >
+      {{ authStore.userRole() }}
+    </span>
+  </div>
+
+  <div class="flex items-center gap-2">
+    <span class="font-semibold text-gray-600 shrink-0">Authentifié :</span>
+    <span
+      class="px-2 py-0.5 rounded text-sm font-bold"
+      [class.bg-green-100]="authStore.isAuthenticated()"
+      [class.text-green-700]="authStore.isAuthenticated()"
+      [class.bg-red-100]="!authStore.isAuthenticated()"
+      [class.text-red-700]="!authStore.isAuthenticated()"
+    >
+      {{ authStore.isAuthenticated() ? 'Oui' : 'Non' }}
+    </span>
+  </div>
+
+  <div class="flex items-center gap-2">
+    <span class="font-semibold text-gray-600 shrink-0">Session expirée :</span>
+    <span
+      class="px-2 py-0.5 rounded text-sm font-bold"
+      [class.bg-red-100]="authStore.isSessionExpired()"
+      [class.text-red-700]="authStore.isSessionExpired()"
+      [class.bg-green-100]="!authStore.isSessionExpired()"
+      [class.text-green-700]="!authStore.isSessionExpired()"
+    >
+      {{ authStore.isSessionExpired() ? 'Oui' : 'Non' }}
+    </span>
+  </div>
+
+  <div class="space-y-1">
+    <span class="font-semibold text-gray-600 block">Access token :</span>
+    @if (authStore.accessToken()) {
+      <div class="bg-gray-100 rounded p-2">
+        <!-- affiche seulement le début et la fin du token -->
+        <code class="text-xs text-gray-500 break-all">
+          {{ authStore.accessToken()! | slice: 0 : 20 }}...{{
+            authStore.accessToken()! | slice: -10
+          }}
+        </code>
+      </div>
+    } @else {
+      <span class="text-sm text-gray-400">Aucun token</span>
+    }
+  </div>
+</div>

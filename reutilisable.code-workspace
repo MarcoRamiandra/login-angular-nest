@@ -1,0 +1,105 @@
+{
+  "folders": [
+    { "name": "root", "path": "." },
+    { "name": "frontend", "path": "login" },
+    { "name": "backend", "path": "server-login" }
+  ],
+  "settings": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "[typescript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+    "[html]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+    "npm.packageManager": "npm",
+    "editor.codeActionsOnSave": {
+      "source.removeUnusedImports": "explicit"
+    }
+  },
+  "launch": {
+    "configurations": [
+      {
+        "name": "Frontend (login)",
+        "type": "chrome",
+        "request": "launch",
+        "preLaunchTask": "Start frontend",
+        "url": "http://localhost:4200",
+        "webRoot": "${workspaceFolder:frontend}/src"
+      },
+      {
+        "name": "Backend (server-login)",
+        "request": "launch",
+        "runtimeArgs": ["run", "start:dev"],
+        "runtimeExecutable": "npm",
+        "skipFiles": ["<node_internals>/**"],
+        "type": "node",
+        "cwd": "${workspaceFolder:backend}"
+      }
+    ],
+    "compounds": [
+      {
+        "name": "Frontend + Backend",
+        "configurations": ["Frontend (login)", "Backend (server-login)"],
+        "preLaunchTask": "Start all"
+      }
+    ]
+  },
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Start frontend",
+        "type": "npm",
+        "script": "start",
+        "path": "login",
+        "isBackground": true,
+        "problemMatcher": {
+          "pattern": { "regexp": "." },
+          "background": {
+            "activeOnStart": true,
+            "beginsPattern": ".",
+            "endsPattern": "bundle generation (complete|failed)"
+          }
+        }
+      },
+      {
+        "label": "Start backend",
+        "type": "npm",
+        "script": "start:dev",
+        "path": "server-login",
+        "isBackground": true,
+        "problemMatcher": {
+          "pattern": { "regexp": "." },
+          "background": {
+            "activeOnStart": true,
+            "beginsPattern": ".",
+            "endsPattern": "Nest application successfully started"
+          }
+        }
+      },
+      {
+        "label": "Start all",
+        "dependsOn": ["Start frontend", "Start backend"],
+        "dependsOrder": "parallel"
+      },
+      {
+        "label": "Test frontend",
+        "type": "npm",
+        "script": "test",
+        "path": "login"
+      },
+      {
+        "label": "Test backend",
+        "type": "npm",
+        "script": "test",
+        "path": "server-login"
+      },
+      {
+        "label": "Build all",
+        "dependsOn": [
+          { "label": "Build frontend", "path": "login", "type": "npm", "script": "build" },
+          { "label": "Build backend", "path": "server-login", "type": "npm", "script": "build" }
+        ],
+        "dependsOrder": "parallel"
+      }
+    ]
+  }
+}
