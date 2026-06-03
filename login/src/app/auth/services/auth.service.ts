@@ -3,8 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthTokens, User } from '../models';
 import { LoginCredentials } from '../models';
+import { environment } from '../../../environments/environment';
 
-const API_URL = 'http://localhost:3000/api/auth';
+const API_URL = `${environment.apiUrl}/auth`;
 
 export interface AuthResponse {
   user: User;
