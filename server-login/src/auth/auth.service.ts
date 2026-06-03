@@ -22,7 +22,7 @@ export class AuthService {
     async register(dto: RegisterDto) {
         const existing = await this.userService.findByEmail(dto.email);
         if (existing) {
-            throw new ConflictException('Cet email est déjà utilisé.');
+            throw new ConflictException('This email is already in use.');
         }
 
         const hashed = await bcrypt.hash(dto.password, 10);
@@ -38,12 +38,12 @@ export class AuthService {
     async login(dto: LoginDto) {
         const user = await this.userService.findByEmail(dto.email);
         if (!user) {
-            throw new UnauthorizedException('Email ou mot de passe incorrect.');
+            throw new UnauthorizedException('Email or password is incorrect.');
         }
 
         const isMatch = await bcrypt.compare(dto.password, user.password);
         if (!isMatch) {
-            throw new UnauthorizedException('Email ou mot de passe incorrect.');
+            throw new UnauthorizedException('Email or password is incorrect.');
         }
 
         const tokens = await this.generateTokens(user);
@@ -59,12 +59,12 @@ export class AuthService {
     async refresh(userId: string, refreshToken: string) {
         const user = await this.userService.findById(userId);
         if (!user || !user.refreshToken) {
-            throw new UnauthorizedException('Session expirée.');
+            throw new UnauthorizedException('Session expired.');
         }
 
         const isMatch = await bcrypt.compare(refreshToken, user.refreshToken);
         if (!isMatch) {
-            throw new UnauthorizedException('Session expirée.');
+            throw new UnauthorizedException('Session expired.');
         }
 
         const tokens = await this.generateTokens(user);
@@ -76,13 +76,13 @@ export class AuthService {
 
     async logout(userId: string) {
         await this.userService.updateRefreshToken(userId, null);
-        return { message: 'Déconnecté avec succès.' };
+        return { message: 'Logged out successfully.' };
     }
 
     async getProfile(userId: string) {
         const user = await this.userService.findById(userId);
         if (!user) {
-            throw new UnauthorizedException('Utilisateur introuvable.');
+            throw new UnauthorizedException('User not found.');
         }
         return this.sanitize(user);
     }
@@ -125,7 +125,7 @@ export class AuthService {
     async registerWithRole(dto: RegisterAdminDto) {
         const existing = await this.userService.findByEmail(dto.email);
         if (existing) {
-            throw new ConflictException('Cet email est déjà utilisé.');
+            throw new ConflictException('This email is already in use.');
         }
         const hashed = await bcrypt.hash(dto.password, 10);
         const user = await this.userService.create({

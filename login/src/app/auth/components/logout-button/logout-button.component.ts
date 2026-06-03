@@ -1,6 +1,7 @@
 import { Component, inject, input } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthStore } from '../../store/auth.store';
+import { TranslationService } from '../../../i18n';
 
 @Component({
   selector: 'app-logout-button',
@@ -39,9 +40,9 @@ import { AuthStore } from '../../store/auth.store';
 export class LogoutButtonComponent {
   private authStore = inject(AuthStore);
   private router = inject(Router);
+  private translator = inject(TranslationService);
 
-  // inputs signaux — Angular 17+
-  label = input<string>('Se déconnecter');
+  label = input<string>(this.translator.translations().logout.button);
   variant = input<'primary' | 'ghost'>('primary');
 
   logout(): void {

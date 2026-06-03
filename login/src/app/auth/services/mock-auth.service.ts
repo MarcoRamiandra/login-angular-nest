@@ -24,7 +24,7 @@ export class MockAuthService {
     if (!match || match.password !== credentials.password) {
       const error: AuthError = {
         code: 'invalid_credentials',
-        message: 'Email ou mot de passe incorrect.',
+        message: 'Email or password is incorrect.',
       };
       return throwError(() => error).pipe(delay(FAKE_DELAY));
     }
@@ -42,7 +42,7 @@ export class MockAuthService {
     if (!userExists) {
       const error: AuthError = {
         code: 'session_expired',
-        message: 'Session expirée, veuillez vous reconnecter.',
+        message: 'Session expired, please reconnect.',
       };
       return throwError(() => error).pipe(delay(FAKE_DELAY));
     }
@@ -57,7 +57,7 @@ export class MockAuthService {
     if (!match) {
       const error: AuthError = {
         code: 'session_expired',
-        message: 'Session expirée, veuillez vous reconnecter.',
+        message: 'Session expired, please reconnect.',
       };
       return throwError(() => error).pipe(delay(FAKE_DELAY));
     }

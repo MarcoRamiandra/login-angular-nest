@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthStore } from '../../auth/store/auth.store';
 import { take } from 'rxjs';
+import { TranslationService } from '../../i18n';
 
 @Component({
   selector: 'app-login',
@@ -17,6 +18,8 @@ export class LoginComponent implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private authStore = inject(AuthStore);
+  private translator = inject(TranslationService);
+  readonly t = this.translator.translations;
 
   isLoading = this.authStore.isLoading;
   hasError = this.authStore.hasError;
@@ -47,27 +50,11 @@ export class LoginComponent implements OnInit {
   getFieldError(field: string): string | null {
     const control = this.form.get(field);
     if (!control || !control.invalid || !control.touched) return null;
-
-    if (control.hasError('required')) return 'Ce champ est obligatoire.';
-    if (control.hasError('email')) return 'Email invalide.';
-    if (control.hasError('minlength')) return 'Minimum 6 caractères.';
-
-    return null;
+    return this.translator.fieldError(field, control.errors ?? {});
   }
 
   get storeErrorMessage(): string | null {
-    const code = this.error()?.code;
-    if (!code) return null;
-
-    const messages: Record<string, string> = {
-      invalid_credentials: 'Email ou mot de passe incorrect.',
-      account_locked: 'Compte bloqué. Contactez l\'administrateur.',
-      network_error: 'Erreur réseau. Vérifiez votre connexion.',
-      session_expired: 'Session expirée. Veuillez vous reconnecter.',
-      unknown: 'Une erreur inattendue est survenue.',
-    };
-
-    return messages[code] ?? messages['unknown'];
+    return this.translator.errorCodeMessage(this.error()?.code);
   }
 
   onSubmit(): void {

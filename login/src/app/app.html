@@ -1,5 +1,14 @@
-<router-outlet />
+<div class="relative">
+  <button
+    class="fixed top-4 right-4 z-50 px-3 py-1.5 text-xs font-semibold border rounded cursor-pointer hover:bg-slate-100"
+    (click)="switchLang()"
+  >
+    {{ currentLang() === 'fr' ? 'EN' : 'FR' }}
+  </button>
 
-@if (authStore.isAuthenticated()) {
-  <app-logout-button></app-logout-button>
-}
+  <router-outlet />
+
+  @if (authStore.isAuthenticated()) {
+    <app-logout-button></app-logout-button>
+  }
+</div>
